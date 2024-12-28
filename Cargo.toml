@@ -5,6 +5,12 @@ edition = "2021"
 authors = ["Stephen Morgan <steve@rebelops.io>"]
 description = "Configuration management tool for TBD Tools"
 
+[features]
+# Enable integration tests that require external dependencies like ansible
+integration = []
+# Default features
+default = []
+
 [dependencies]
 tbd-iac = { git = "https://github.com/tbdtools/tbd-iac.git" }
 tokio = { version = "1.35", features = ["full"] }
