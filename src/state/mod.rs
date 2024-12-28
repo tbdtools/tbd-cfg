@@ -1,4 +1,3 @@
-// tbd-cfg/src/state/mod.rs
 use anyhow::Result;
 use serde_json::Value;
 use tbd_iac::state::{Resource, StateManager as IacStateManager};
@@ -13,20 +12,24 @@ impl StateAdapter {
     }
 
     pub async fn add_config_state(&self, id: String, state: Value) -> Result<()> {
-        let resource = Resource::new(id, "tbd-cfg", state);
+        let resource = Resource {
+            id,
+            provider: "tbd-cfg".to_string(),
+            state,
+        };
         self.state.add_resource(resource).await
     }
 
     pub async fn get_config(&self, id: &str) -> Option<Value> {
-        self.state.get_resource(id).await.map(|r| r.state().clone())
+        self.state.get_resource(id).await.map(|r| r.state)
     }
 
     pub async fn list_configs(&self) -> Vec<String> {
         let resources = self.state.list_resources().await;
         resources
             .into_iter()
-            .filter(|r| r.provider() == "tbd-cfg")
-            .map(|r| r.id().to_string())
+            .filter(|r| r.provider == "tbd-cfg")
+            .map(|r| r.id)
             .collect()
     }
 
